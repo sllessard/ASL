@@ -1,18 +1,19 @@
 <?php
-session_start();
-$_SESSION['current_rows'] = 0; //Reset number of rows displayed for use in ajaxData.php
-if (!isset ($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) {
-  header('Location: index.php'); //Return user to landing if their session is expired. New entry required to view output.php
-
-  $now = time();
-if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after']) {
-    // If session expired on output.php load create new session.
-    session_unset();
-    session_destroy();
-    session_start();
-}
-$_SESSION['discard_after'] = $now;
-}
+  session_start();
+  //Reset number of rows displayed for use in ajaxData.php
+  $_SESSION['current_rows'] = 0;
+  if (!isset ($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) {
+    //Return user to landing if their session is expired. New entry required to view output.php
+    header('Location: index.php');
+    $now = time();
+    if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after']) {
+        // If session expired on output.php load create new session.
+        session_unset();
+        session_destroy();
+        session_start();
+    }
+    $_SESSION['discard_after'] = $now;
+  }
 
   @ $db = new mysqli('$host', '$username', '$passwd', '$dbname');
 
@@ -51,7 +52,9 @@ $_SESSION['discard_after'] = $now;
         <?php } ?>
     </header>
     <div class="inputOutput" id="results">
-      <?php include 'includes/ajaxdata.php'; //ajaxdata checks database for any entries not displayed and updates
+      <?php 
+      //ajaxdata checks database for any entries not displayed and updates
+      include 'includes/ajaxdata.php'; 
        echo '<time class="creationDate">'.date("m \/ d \/ y", strtotime($when)).'&nbsp;&nbsp;&nbsp;—&nbsp;&nbsp;&nbsp;'.date("H : i : s", strtotime($when)).'&nbsp;&nbsp;&nbsp;—&nbsp;&nbsp;&nbsp;۞</time>'; //Table creation output
        ?>
     </div> 
